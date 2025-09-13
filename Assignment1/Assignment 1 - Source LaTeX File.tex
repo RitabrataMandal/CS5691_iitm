@@ -477,18 +477,18 @@ Given the above setup:
 			\mu_{x \mid y=3} &= \frac{1.5 + 0.9 + 1.8 + 2.5 + 2.6}{5} = 1.86.
 		\end{align*}
 	\end{itemize}
-	by the definition we write,
+	our objective is to get the optimal classifier,
 	\begin{align*}
 		h_{\text{MLE}(x)}=\argmin_{j\in\{1,2,3\}} p(y\mid x)\cdot L_{:,j}
 	\end{align*}
 	if $j=1$ we have
 	\begin{align*}
-		p(y\mid x)\cdot L_{:,1} =p(y=2\mid x)+2p(y=2\mid x)\propto\left[\frac{4}{15}\mathcal{N}(x\mid 0.5,1)+\frac{10}{14}\mathcal{N}(x\mid 1.86,1)\right]:=N_1(x)
+		p(y\mid x)\cdot L_{:,1} =p(y=2\mid x)+2p(y=3\mid x)\propto\left[\frac{4}{14}\mathcal{N}(x\mid 0.5,1)+\frac{10}{14}\mathcal{N}(x\mid 1.86,1)\right]:=N_1(x)
 	\end{align*}
 	similarly for $j=2 $ and $j=3$ we have
 	\begin{align*}
-		p(y\mid x)\cdot L_{:,2}& =p(y=1\mid x)+p(y=3\mid x)\propto\left[\frac{5}{15}\mathcal{N}(x\mid -2.1,1)+\frac{5}{14}\mathcal{N}(x\mid 1.86,1)\right]:=N_2(x)\\
-		p(y\mid x)\cdot L_{:,3}& =2p(y=1\mid x)+p(y=2\mid x)\propto\left[\frac{10}{15}\mathcal{N}(x\mid -2.1,1)+\frac{10}{14}\mathcal{N}(x\mid 0.5,1)\right]:=N_3(x)
+		p(y\mid x)\cdot L_{:,2}& =p(y=1\mid x)+p(y=3\mid x)\propto\left[\frac{5}{14}\mathcal{N}(x\mid -2.1,1)+\frac{5}{14}\mathcal{N}(x\mid 1.86,1)\right]:=N_2(x)\\
+		p(y\mid x)\cdot L_{:,3}& =2p(y=1\mid x)+p(y=2\mid x)\propto\left[\frac{10}{14}\mathcal{N}(x\mid -2.1,1)+\frac{4}{14}\mathcal{N}(x\mid 0.5,1)\right]:=N_3(x)
 	\end{align*}
 	To find the decision boundaries we know at the boundaries the risks are same(i.e., $N_i=N_j,i\neq j $). So, we can write
 	\begin{align*}
@@ -496,7 +496,7 @@ Given the above setup:
 		N_1(x)=N_3(x)\Rightarrow x\approx -0.120\\
 		N_2(x)=N_3(x)\Rightarrow x\approx 1.024
 	\end{align*}
-	Thus the actual Bayes regions shows in Figure \ref{fig:Risk} (minimizing expected loss under the MLE model).
+	Figure \ref{fig:Risk} shows the decision boundaries (minimizing expected loss under the MLE model).
 	\begin{figure}[H]
 		\centering
 		\resizebox{.8\linewidth}{!}{
@@ -506,6 +506,15 @@ Given the above setup:
 		\caption{Risk}
 		\label{fig:Risk}
 	\end{figure}
+	Thus, the optimal classifier 
+	\begin{align*}
+		h_{\text{ MLE}}(x) = \left\{ \begin{array}{cc}
+			1 &; x\leq-0.748\\
+			2 &; -0.748<x\leq1.024\\
+			3 &; 1.024<x
+			\end{array}
+			\right.
+	\end{align*}
 \end{solution}
 
 \subpart[4] Derive the optimal classifier $h_{MAP}(x)$ and provide the decision boundaries/regions, based on the Bayesian MAP estimation from data (assuming that the parameter for the class priors follows a Dirichlet distribution with parameters/pseudocounts given by (2, 2 and 2), and the mean parameter for the class conditionals follows a standard normal distribution).
