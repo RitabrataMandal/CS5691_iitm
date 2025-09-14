@@ -1,0 +1,86 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows.meta} 
+\pgfplotsset{compat=1.18}
+\begin{document}
+	\begin{tikzpicture}
+		\begin{axis}[
+			domain=-3.5:3.5,
+			samples=200,
+			axis lines=middle,
+			xlabel={$x$},
+			xtick=\empty,
+			ytick=\empty,
+			ymin=-0.02, ymax=0.9,
+			enlargelimits=false,
+			clip=false,
+			grid=major,
+			width=12cm, height=5.5cm
+			]
+			\def\ua{-1.75}
+			\def\ub{0.4}
+			\def\uc{1.55}
+			\def\sa{0.17}
+			\def\sb{.2}
+			\def\sc{0.17}
+			\def\xa{-0.7007}
+			\def\xb{0.9579}
+			
+			% Normal mixture curves
+			\addplot[red, thick]
+			{5/17 * 1/(sqrt(2*pi*\sb)) * exp(-((x-\ub)^2)/(2*\sb))
+				+ 12/17 * 1/(sqrt(2*pi*\sc)) * exp(-((x-\uc)^2)/(2*\sc))};
+			\addlegendentry{$N_1(x)$}
+			
+			\addplot[blue, thick]
+			{6/17*1/(sqrt(2*pi*\sa)) * exp(-((x-\ua)^2)/(2*\sa))
+				+6/17*1/(sqrt(2*pi*\sc)) * exp(-((x-\uc)^2)/(2*\sc))};
+			\addlegendentry{$N_2(x)$}
+			
+			\addplot[green, thick]
+			{12/17*1/(sqrt(2*pi*\sa)) * exp(-((x-\ua)^2)/(2*\sa))
+				+5/17*1/(sqrt(2*pi*\sb)) * exp(-((x-\ub)^2)/(2*\sb))};
+			\addlegendentry{$N_3(x)$}
+			
+			% vertical dashed decision boundaries
+			\addplot[black, dashed, thick] coordinates {(\xa,-0.03) (\xa,0.8)};
+			\node[below] at (axis cs:\xa,-0.03) {$\xa$};
+			
+			\addplot[black, dashed, thick] coordinates {(\xb,-0.03) (\xb,0.8)};
+			\node[below] at (axis cs:\xb,-0.03) {$\xb$};
+			
+			% Fills with corrected domain and variable
+			\fill [red, opacity = .4, domain=-3.5:\xa, variable=\x]
+			(-3.5, 0)
+			-- plot ({\x}, {5/17 * 1/(sqrt(2*pi*\sb)) * exp(-((\x-\ub)^2)/(2*\sb))
+				+ 12/17 * 1/(sqrt(2*pi*\sc)) * exp(-((\x-\uc)^2)/(2*\sc))})
+			-- (\xa, 0)
+			-- cycle;
+			
+			\fill [blue, opacity = .4, domain=\xa:\xb, variable=\x]
+			(\xa, 0)
+			-- plot ({\x}, {6/17*1/(sqrt(2*pi*\sa)) * exp(-((\x-\ua)^2)/(2*\sa))
+				+6/17*1/(sqrt(2*pi*\sc)) * exp(-((\x-\uc)^2)/(2*\sc))})
+			-- (\xb, 0)
+			-- cycle;
+			
+			\fill [green, opacity = .4, domain=\xb:3.5, variable=\x]
+			(\xb, 0)
+			-- plot ({\x}, {12/17*1/(sqrt(2*pi*\sa)) * exp(-((\x-\ua)^2)/(2*\sa))
+				+5/17*1/(sqrt(2*pi*\sb)) * exp(-((\x-\ub)^2)/(2*\sb))})
+			-- (3.5, 0)
+			-- cycle;
+			
+			% Labels
+			\draw[Stealth-Stealth] (\xa,-0.03) -- (-3.5,-0.03)
+			node[midway, below] {Class 1};
+			
+			\draw[Stealth-Stealth] (\xa,0.75) -- (\xb,0.75)
+			node[midway, below] {Class 2};
+			
+			\draw[Stealth-Stealth] (3.5,-0.03) -- (\xb,-0.03)
+			node[midway, below] {Class 3};
+			
+		\end{axis}
+	\end{tikzpicture}
+\end{document}

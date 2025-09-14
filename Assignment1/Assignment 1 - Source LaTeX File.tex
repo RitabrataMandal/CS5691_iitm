@@ -119,17 +119,32 @@ Krypto cannot go from one forest to the other. Clark can search only in the dayt
 	$A$ =  event that Clark has lost Krypto in forest A\\
 	$B$ = event that Clark has lost Krypto in forest B\\
 	$F$ = event that he found Krypto\\
-	We know, $\mathcal{P}(A)=0.4,\mathcal{P}(B)=0.6, \mathcal{P}(F\mid A)=0.25, \mathcal{P}(F\mid B)=0.15$
-	we have to find out the maximum value among $\mathcal{P}(A\mid F) \text{ and }\mathcal{P}(B\mid F)$ To do that by Bayes rule we have
+	We know, $p(A)=0.4,p(B)=0.6, p(F\mid A)=0.25, p(F\mid B)=0.15$
+	we have to find out the maximum value among $p(A\mid F) \text{ and }p(B\mid F)$ To do that by Bayes rule we have
 	\begin{align*}
-		\mathcal{P}(A\mid F) &= \frac{\mathcal{P}(A)\mathcal{P}(F\mid A)}{\mathcal{P}(F)};\quad\mathcal{P}(B\mid F) = \frac{\mathcal{P}(B)\mathcal{P}(F\mid B)}{\mathcal{P}(F)}\\
-		\Rightarrow	\mathcal{P}(A\mid F) &=0.1/\mathcal{P}(F); \quad\quad\mathcal{P}(B\mid F) = 0.09/\mathcal{P}(F)
+		p(A\mid F) &= \frac{p(A)p(F\mid A)}{p(F)};\quad p(B\mid F) = \frac{p(B)p(F\mid B)}{p(F)}\\
+		\Rightarrow	p(A\mid F) &=0.1/p(F); \quad\quad p(B\mid F) = 0.09/ p(F)
 	\end{align*}
-	As $\mathcal{P}(A\mid F)>\mathcal{P}(B\mid F)$ we conclude that it it better to search in forest A.
+	As $p(A\mid F)>p(B\mid F)$ we conclude that it it better to search in forest A.
 \end{solution}
 
 \subpart[1] Given that Clark looked in A on the first day but didn’t find Krypto, what is the probability that Krypto is in A?
 \begin{solution}
+	Define events\\
+	$A$ = Krypto is in forest A. \\ 
+	$B$ = Krypto is in forest B.  \\
+	$F$ = Clark searches in forest A on the first day and does not find Krypto.  	\\
+	We are asked to compute $P(A \mid F)$.
+	\[P(A \mid F) = \frac{P(F \mid A)\,P(A)}{P(F \mid A)\,P(A) + P(F \mid B)\,P(B)}.\] 
+	And we can write
+	\[P(F \mid A) = 1 - 0.25 = 0.75,\]
+	since if Krypto is in forest $A$, the probability Clark does not find him in one day is $0.75$. And  
+	\[P(F \mid B) = 1,\]
+	since if Krypto is in forest $B$, Clark is searching the wrong forest and will certainly not find him. Also given
+	\[P(A) = 0.4, \quad P(B) = 0.6.\]
+	Finally,
+	\[P(A \mid F) = \frac{0.75 \times 0.4}{0.75 \times 0.4 + 1 \times 0.6}= \frac{1}{3}.
+	\]
 \end{solution}
 \end{subparts}
 
@@ -188,20 +203,17 @@ This leads to following partitions
   \end{bmatrix} \right)$
 \end{solution}
 \subpart[1] $p(x_1 | x_3 = -1)$ and $p(x_3)$.
-\begin{solution} Similarly to the previous part of the question we can write that $p(x_1, x_2\mid x_3=-1)$ is a Gaussian distribution $\mathcal{N}\left(\mu_{a\mid b=-1}, \Sigma_{a\mid b=-1}\right)$ where new mean and covariance defined by: \begin{align*}
-		\mu_{a\mid b=-1}=\begin{bmatrix}-0.5\\
-			1.5
-		\end{bmatrix}\quad\Sigma_{a\mid b=-1} = \begin{bmatrix}
-		0.2 & -0.9\\
-		-0.9 & 4.9
-		\end{bmatrix}
-	\end{align*}  \\
+\begin{solution} Similarly to the previous part of the question we can write that 
+	\[p(x_1\mid x_3=-1) = \mathcal{N}\left(\mu_{x_1\mid x_3=-1},\Sigma_{x_1\mid x_3=-1}\right)\] where new mean and covariance defined by: 
+	\begin{align*}
+		\mu_{x_1\mid x_3=-1}&=\mu_{x_1}+\Sigma_{x_1x_3}\Sigma_{x_1x_3}^{-1}(-1-4)=-0.5\\
+		\Sigma_{x_1\mid x_3} &= \Sigma_{x_1x_1}-\Sigma_{x_1x_3}\Sigma_{x_3x_3}^{-1}\Sigma_{x_3x_1}=0.3-.1=0.2
+	\end{align*}
 	Now we can write $p(x_1\mid x_3=-1)=\mathcal{N}\left(x_1;\mu=-0.5,\Sigma=0.2\right)$\\
 	The marginal distribution $p(x_3)$ follows as
 	\begin{align*}
-		x_3 \sim \mathcal{N}\left(\mu_3,\Sigma_{33}\right)
+		p(x_3) = \mathcal{N}\left(\mu_3=4,\Sigma_{33}=10\right)
 	\end{align*}
-	where $\mu_3=4 \text{ and }\Sigma_{33} =10$
 \end{solution}
 \end{subparts}
 
@@ -250,8 +262,26 @@ $Ax = b$ does not admit any solution for $x$. Now:
 \begin{subparts}
 \subpart[2] Prove that $A^T A x = A^T b$ always admits a solution.\\ (\textbf{Hint:} Show that $\mathrm{NullSpace}(A) = \mathrm{NullSpace}(A^T A)$).
 %\newpage
-%\begin{solution}
-%\end{solution}
+\begin{solution}
+	If \(z\in\mathrm{Null}(A)\) then \(Az=0\). Hence
+	\[
+	A^{T}A z = A^{T}(Az)=A^{T}0=0,
+	\]
+	so \(z\in\mathrm{Null}(A^{T}A)\). Conversely, if \(z\in\mathrm{Null}(A^{T}A)\) then
+	\[
+	0 = z^{T}(A^{T}A)z = (Az)^{T}(Az)=\|Az\|^2,
+	\]
+	so \(Az=0\) and therefore \(z\in\mathrm{Null}(A)\). This proves \(\mathrm{Null}(A)=\mathrm{Null}(A^{T}A)\).
+	
+	From this equality of nullspaces we get \(\mathrm{rank}(A)=\mathrm{rank}(A^{T}A)\). Hence the column spaces satisfy
+	\[
+	\mathrm{Col}(A^{T}A)=\mathrm{Col}(A^{T}),
+	\]
+	because \(A^{T}A\) and \(A^{T}\) have the same rank and \(\mathrm{Col}(A^{T}A)\subseteq\mathrm{Col}(A^{T})\) always holds.
+	Now for any \(b\in\mathbb{R}^m\) the vector \(A^{T}b\) belongs to \(\mathrm{Col}(A^{T})\). Using the equality of column spaces we conclude
+	\[A^{T}b\in\mathrm{Col}(A^{T})=\mathrm{Col}(A^{T}A).\]
+	Hence, the linear system $A^TAx =A^Tb$ always admits a solution.
+\end{solution}
 
 \subpart[2] Prove that the minimizer $x^*$ of $\|Ax - b\|^2$ satisfies the equation $A^T A x^* = A^T b$.
 \begin{solution}
@@ -300,8 +330,16 @@ L(w) = \sum_{i=1}^{n} \log\!\left(1 + exp(-y_iw^Tx_i)\right)
 \]
 where, $w \in \mathbb{R}^d$, $x_i \in \mathbb{R}^d$,  $y_i \in \{-1, +1\}$ and $n$ is the number of data points (we will encounter this loss function later in the course in Logistic Regression).  
 \\(\textbf{Hint:} Sum of convex functions is convex, and also composition of a convex function and an affine function is convex. Use these results along with convexity of $\Psi$ function from last part to prove this result. Also, visualizing the above function using simple values may provide some intuition to solve the problem.)
-%\begin{solution}
-%\end{solution}
+\begin{solution}
+	For $w \in \mathbb{R}^d$, $x_i \in \mathbb{R}^d$, and $y_i \in \{-1,+1\}$, the term 
+	$-y_i w^\top x_i$ is affine in $w$, hence convex. Since the exponential function is convex and increasing, 
+	$\exp(-y_i w^\top x_i)$ is convex, and so is $1+\exp(-y_i w^\top x_i)$. Because $\log(\cdot)$ is increasing, 
+	$\log\!\left(1+\exp(-y_i w^\top x_i)\right)$ is convex. Finally, a sum of convex functions is convex, so
+	\[
+	\sum_{i=1}^n \log\!\left(1+\exp(-y_i w^\top x_i)\right)
+	\]
+	is convex in $w$.
+\end{solution}
 \end{subparts}
 
 \part[2] Given a function $f(x) = x^T Q x + c^T x + d$, where $Q$ is a symmetric matrix, prove the following statements:
@@ -438,7 +476,7 @@ p(w) =
 %\newpage
 \end{parts}
 
-
+\newpage
 \question[10] [{\sc Putting It Together: Density Estimation + Decision Theory}] 
 \begin{parts}
 \part[8][Optimal Classifier by Pen/Paper]
@@ -479,7 +517,7 @@ Given the above setup:
 	\end{itemize}
 	our objective is to get the optimal classifier,
 	\begin{align*}
-		h_{\text{MLE}(x)}=\argmin_{j\in\{1,2,3\}} p(y\mid x)\cdot L_{:,j}
+		h_{MLE}(x)=\argmin_{j\in\{1,2,3\}} p(y\mid x)\cdot L_{:,j}
 	\end{align*}
 	if $j=1$ we have
 	\begin{align*}
@@ -492,26 +530,26 @@ Given the above setup:
 	\end{align*}
 	To find the decision boundaries we know at the boundaries the risks are same(i.e., $N_i=N_j,i\neq j $). So, we can write
 	\begin{align*}
-		N_1(x)=N_2(x)\Rightarrow x\approx -0.748\\
-		N_1(x)=N_3(x)\Rightarrow x\approx -0.120\\
-		N_2(x)=N_3(x)\Rightarrow x\approx 1.024
+		N_1(x)&=N_2(x)\Rightarrow x\approx -0.748\\
+		N_1(x)&=N_3(x)\Rightarrow x\approx -0.120\\
+		N_2(x)&=N_3(x)\Rightarrow x\approx 1.024
 	\end{align*}
-	Figure \ref{fig:Risk} shows the decision boundaries (minimizing expected loss under the MLE model).
+	Figure \ref{fig:Risk_MLE} shows the decision boundaries (minimizing expected loss under the MLE model).
 	\begin{figure}[H]
 		\centering
 		\resizebox{.8\linewidth}{!}{
 			\centering
 			\includegraphics[width=\linewidth]{question_4a_i.pdf}
 		}
-		\caption{Risk}
-		\label{fig:Risk}
+		\caption{Risk in MLE}
+		\label{fig:Risk_MLE}
 	\end{figure}
 	Thus, the optimal classifier 
 	\begin{align*}
-		h_{\text{ MLE}}(x) = \left\{ \begin{array}{cc}
-			1 &; x\leq-0.748\\
-			2 &; -0.748<x\leq1.024\\
-			3 &; 1.024<x
+		h_{MLE} (x) = \left\{ \begin{array}{ll}
+			1;& x\leq-0.748\\
+			2;& -0.748<x\leq1.024\\
+			3;& 1.024<x
 			\end{array}
 			\right.
 	\end{align*}
@@ -519,10 +557,83 @@ Given the above setup:
 
 \subpart[4] Derive the optimal classifier $h_{MAP}(x)$ and provide the decision boundaries/regions, based on the Bayesian MAP estimation from data (assuming that the parameter for the class priors follows a Dirichlet distribution with parameters/pseudocounts given by (2, 2 and 2), and the mean parameter for the class conditionals follows a standard normal distribution).
 \begin{solution}
+	Given that 
+	\begin{align*}
+		y &\sim \text{Dir}\left(\pi\mid\alpha=(2,2,2)\right)\\
+		x\mid y=1 &\sim \mathcal{N}(\mu_1,\sigma^2=1);\quad \mu_1\sim\mathcal{N}(0,\sigma_{0}^2=1)\\
+		x\mid y=2 &\sim \mathcal{N}(\mu_2,\sigma^2=1);\quad \mu_2\sim\mathcal{N}(0,\sigma_{0}^2=1)\\
+		x\mid y=3 &\sim \mathcal{N}(\mu_3,\sigma^2=1);\quad \mu_3\sim\mathcal{N}(0,\sigma_{0}^2=1)
+	\end{align*}
+	and by Bayesian posterior estimation we can write 
+	\begin{align*}
+		\pi\mid D&\sim\text{ Dir}(2+5,2+4,2+5)=\text{ Dir}(7,6,7)\\
+		\mu_1\mid D&\sim \mathcal{N}(\mu_{N_1},\sigma_{N_1}^2)\\
+		\mu_2\mid D&\sim \mathcal{N}(\mu_{N_2},\sigma_{N_2}^2)\\
+		\mu_3\mid D&\sim \mathcal{N}(\mu_{N_3},\sigma_{N_3}^2)
+	\end{align*}
+	where
+	\begin{align*}
+		\pi_1& = \frac{7-1}{7+6+7-3}=\frac{6}{17};\quad\pi_2= \frac{6-1}{7+6+7-3}=\frac{5}{17}; &\pi_3=\frac{7-1}{7+6+7-3}=\frac{6}{17}\\
+		\mu_{N_1}&=\frac{N_1\sigma_{0}^2}{N_1\sigma_{0}^2+\sigma^2}\mu_{1_{\text{ML}}}=\frac{5}{6}\times (-2.1)=-1.75;& \sigma_{N_1}^2 = 1/\left(\frac{N_1}{\sigma^2}+\frac{1}{\sigma_{0}^2}\right)=1/6\\
+		\mu_{N_2}&=\frac{N_2\sigma_{0}^2}{N_2\sigma_{0}^2+\sigma^2}\mu_{2_{\text{ML}}}=\frac{4}{5}\times (0.5)=0.4;&\sigma_{N_2}^2 = 1/\left(\frac{N_2}{\sigma^2}+\frac{1}{\sigma_{0}^2}\right)=1/5\\
+		\mu_{N_3}&=\frac{N_3\sigma_{0}^2}{N_3\sigma_{0}^2+\sigma^2}\mu_{3_{\text{ML}}}=\frac{5}{6}\times (1.86)=1.55;&\sigma_{N_3}^2 = 1/\left(\frac{N_3}{\sigma^2}+\frac{1}{\sigma_{0}^2}\right)=1/6
+	\end{align*}
+	Hence, the class prior are 
+	\begin{align*}
+		p(y=1)=\frac{6}{17};\quad
+		p(y=2)=\frac{5}{17};\quad
+		p(y=3)=\frac{6}{17}	
+	\end{align*}
+	and the class conditional are
+	\begin{align*}
+		p(x\mid y=1)=\mathcal{N}\left(-1.75,\frac{1}{6}\right);~
+		p(x\mid y=2)=\mathcal{N}\left(0.4,\frac{1}{5}\right);~
+		p(x\mid y=3)=\mathcal{N}\left(1.55,\frac{1}{6}\right)
+	\end{align*}
+	our objective to get the optimal classifier
+	\begin{align*}
+		h_{MAP}(x) = \argmin_{j\in\{1,2,3\}} p(y\mid x)\cdot L_{:,j}
+	\end{align*} 
+	if $j=1$ we have
+	\begin{align*}
+		p(y\mid x)\cdot L_{:,1} =p(y=2\mid x)+2p(y=3\mid x)\propto\left[\frac{5}{17}\mathcal{N}\left(0.4,\frac{1}{5}\right)+\frac{12}{17}\mathcal{N}\left(1.55,\frac{1}{6}\right)\right]:=N_1(x)
+	\end{align*}
+	similarly for $j=2 $ and $j=3$ we have
+	\begin{align*}
+		p(y\mid x)\cdot L_{:,2}& =p(y=1\mid x)+p(y=3\mid x)\propto\left[\frac{6}{17}\mathcal{N}\left(-1.75,\frac{1}{6}\right)+\frac{6}{17}\mathcal{N}\left(1.55,\frac{1}{6}\right)\right]:=N_2(x)\\
+		p(y\mid x)\cdot L_{:,3}& =2p(y=1\mid x)+p(y=2\mid x)\propto\left[\frac{12}{17}\mathcal{N}\left(-1.75,\frac{1}{6}\right)+\frac{5}{17}\mathcal{N}\left(0.4,\frac{1}{5}\right)\right]:=N_3(x)
+	\end{align*}
+	To find the decision boundaries we know at the boundaries the risks are same(i.e., $N_i=N_j,i\neq j $). So, we can write
+	\begin{align*}
+		N_1(x)&=N_2(x)\Rightarrow x\approx -0.7007\\
+		N_1(x)&=N_3(x)\Rightarrow x\approx -0.1\\
+		N_2(x)&=N_3(x)\Rightarrow x\approx 0.9579
+	\end{align*}
+	Figure \ref{fig:Risk_MAP} shows the decision boundaries (minimizing expected loss under the MAP model).
+	\begin{figure}[H]
+		\centering
+		\resizebox{0.8\linewidth}{!}{
+			\centering
+			\includegraphics[width=\linewidth]{question_4a_ii.pdf}
+		}
+		\caption{Risk in MAP}
+		\label{fig:Risk_MAP}
+	\end{figure}
+	Thus, the optimal classifier 
+	\begin{align*}
+		h_{MAP} (x) = \left\{ \begin{array}{ll}
+			1;& x\leq-0.7007\\
+			2;&-0.7007<x\leq0.9579\\
+			3;& 0.9579<x
+		\end{array}
+		\right.
+	\end{align*}
 \end{solution}
 
 \subpart[1] Is there any $x \in \mathbb{R}$ that is differently classified by the above two classifiers? 
 \begin{solution}
+	Yes there exist $x\in\mathbb{R}$ that is differently classified by the above two classifiers.
+	For $x\in[-0.748,-0.7007]$ the MLE model classifies as class 2 whereas MAP model classifies as class 1. Similarly for $x\in[0.9579,1.024]$ the MLE model classifies as class 2, where as the MAP model classifies as class-3.
 \end{solution}
 \end{subparts}
 
@@ -567,20 +678,51 @@ For your assignment, you need to provide the following plots/answers (refer to t
 \begin{parts}
 \part[4] The plot of Gaussian pdfs for all classes estimated using the train data (train.txt). (4 Cases $\times$ 2 Datasets = 8 plots in one page)
 %\newpage
-%\begin{solution}
-%\end{solution}
+\begin{solution}
+	\begin{figure}[H]
+		\centering
+		\resizebox{.6\linewidth}{!}{
+			\centering
+			\includegraphics[width=\linewidth]{plots/pdf_case1.pdf}
+		}
+		\caption{Risk in MAP}
+		\label{fig:pdf_1}
+	\end{figure}
+\end{solution}
 
 \part[4] The classifiers, specifically their decision boundary/surface as a 2D plot along with training points marked in the plot (again 8 plots in one page).
-%\begin{solution}
-%\end{solution}
+\begin{solution}
+	\begin{figure}[H]
+		\centering
+		\resizebox{.7\linewidth}{!}{
+			\centering
+			\includegraphics[width=\linewidth]{plots/decision_boundary_bayes_classifier.pdf}
+		}
+		\caption{Decision Boundary}
+		\label{fig:decision_boundary}
+	\end{figure}
+\end{solution}
 
 \part[1] Report the error rates for the above classifiers (four classifiers on the two datasets as a 4 × 2 table, with appropriately named rows and columns).
-%\begin{solution}
-%\end{solution}
+\begin{solution}
+	Error rate on test data:
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Bayes Classifier & Linearly Separable & Non-Linearly Separable \\
+			\hline
+			Shared Covariance & 0 & 0.233 \\
+			\hline
+			Different Covariance & 0 & 0.0267 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{solution}
 
 \part[1] Answer briefly on whether we can use the most general ``Case 2'' for all datasets? If not, answer when a simpler model like ``Case 1'' is preferable over ``Case 2''? 
-%\begin{solution}
-%\end{solution}
+\begin{solution}
+	No we can't always use the case-2. It requires estimating more parameters(i.e. different covariance matrices) and can overfit when the data is limited. Whereas case-1 is simpler mode is preferable when the class covariance are similar, data is roughly linearly separable, or/and the training set is small.
+\end{solution}
 
 \part[5] Ensure that the properly running code files that generates the above plots, etc., are submitted according to the detailed ``General Instructions'' in the beginning of this document.
 %\begin{solution}
