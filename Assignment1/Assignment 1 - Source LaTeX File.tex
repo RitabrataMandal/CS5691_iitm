@@ -63,6 +63,7 @@
 \newcommand{\M}{\mathcal{M}}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\mina}{min\,}
 \begin{document}
 
 \hrule
@@ -71,7 +72,7 @@
 {\sf IITM-CS5691 : Pattern Recognition and Machine Learning  \hfill Release Date: August 26, 2025}
 \\
 \noindent 
-{\sf Assignment 1 \hfill Due Date : September 9, 2025, 9pm}
+{\sf Assignment 1 \hfill Due Date : September 17, 2025, 9pm}
 %{\sf ~\hfill }
 \vspace{3mm}
 \hrule
@@ -269,16 +270,16 @@ $Ax = b$ does not admit any solution for $x$. Now:
 	\]
 	so \(z\in\mathrm{Null}(A^{T}A)\). Conversely, if \(z\in\mathrm{Null}(A^{T}A)\) then
 	\[
-	0 = z^{T}(A^{T}A)z = (Az)^{T}(Az)=\|Az\|^2,
+	0 = z^{T}(A^{T}A)z = (Az)^{T}(Az)=\|Az\|^2\Rightarrow Az =0
 	\]
-	so \(Az=0\) and therefore \(z\in\mathrm{Null}(A)\). This proves \(\mathrm{Null}(A)=\mathrm{Null}(A^{T}A)\).
+	Therefore \(z\in\mathrm{Null}(A)\). This proves \(\mathrm{Null}(A)=\mathrm{Null}(A^{T}A)\).
 	
 	From this equality of nullspaces we get \(\mathrm{rank}(A)=\mathrm{rank}(A^{T}A)\). Hence the column spaces satisfy
 	\[
 	\mathrm{Col}(A^{T}A)=\mathrm{Col}(A^{T}),
 	\]
 	because \(A^{T}A\) and \(A^{T}\) have the same rank and \(\mathrm{Col}(A^{T}A)\subseteq\mathrm{Col}(A^{T})\) always holds.
-	Now for any \(b\in\mathbb{R}^m\) the vector \(A^{T}b\) belongs to \(\mathrm{Col}(A^{T})\). Using the equality of column spaces we conclude
+	Now for any \(b\in\mathbb{R}^m\) we have
 	\[A^{T}b\in\mathrm{Col}(A^{T})=\mathrm{Col}(A^{T}A).\]
 	Hence, the linear system $A^TAx =A^Tb$ always admits a solution.
 \end{solution}
@@ -472,11 +473,28 @@ p(w) =
 \end{cases}
 \]
 \begin{solution}
+	As the samples are from Bernoulli($w$) and we observe two heads and one trail, we have the likelihood as
+	\begin{align*}
+		l(w)=p(D\mid w) = w^2(1-w)
+	\end{align*}
+	For $w\in\{0,0.25,0.5,0.75,1\}$ calculating the likelihood 
+	\begin{align*}
+		l(0)=0;~l(0.25)=\frac{3}{64};~l(0.5)=\frac{8}{64};~l(0.75)=\frac{9}{64};~l(1)=0
+	\end{align*}
+	Hence the MLE estimate for $w$ is $w_{\text{MLE}}=0.75$\\
+	For MAP estimate we calculate the posteriori as 
+	\begin{align*}
+		p(w\mid D) \propto p(w) p(D\mid w)
+	\end{align*}
+	For $w\in\{0,0.25,0.5,0.75,1\}$ calculating the posteriori
+	\begin{align*}
+		p(0\mid D)\propto0;~p(0.25\mid D)\propto\frac{0.12}{64};~p(0.5\mid D)\propto\frac{0.24}{64};~p(0.75\mid D)\propto\frac{0.18}{64};~p(1\mid D)\propto0
+	\end{align*}
+	So, the MAP estimate for $w$ is $w_{\text{MAP}}=0.5$
 \end{solution}
 %\newpage
 \end{parts}
 
-\newpage
 \question[10] [{\sc Putting It Together: Density Estimation + Decision Theory}] 
 \begin{parts}
 \part[8][Optimal Classifier by Pen/Paper]
@@ -534,14 +552,14 @@ Given the above setup:
 		N_1(x)&=N_3(x)\Rightarrow x\approx -0.120\\
 		N_2(x)&=N_3(x)\Rightarrow x\approx 1.024
 	\end{align*}
-	Figure \ref{fig:Risk_MLE} shows the decision boundaries (minimizing expected loss under the MLE model).
+	Figure \ref{fig:Risk_MLE} shows the decision boundaries (minimizing risk under the MLE model).
 	\begin{figure}[H]
 		\centering
 		\resizebox{.8\linewidth}{!}{
 			\centering
 			\includegraphics[width=\linewidth]{question_4a_i.pdf}
 		}
-		\caption{Risk in MLE}
+		\caption{Conditional Risk in MLE}
 		\label{fig:Risk_MLE}
 	\end{figure}
 	Thus, the optimal classifier 
@@ -586,9 +604,9 @@ Given the above setup:
 	\end{align*}
 	and the class conditional are
 	\begin{align*}
-		p(x\mid y=1)=\mathcal{N}\left(-1.75,\frac{1}{6}\right);~
-		p(x\mid y=2)=\mathcal{N}\left(0.4,\frac{1}{5}\right);~
-		p(x\mid y=3)=\mathcal{N}\left(1.55,\frac{1}{6}\right)
+		p(x\mid y=1)=\mathcal{N}\left(-1.75,1\right);~
+		p(x\mid y=2)=\mathcal{N}\left(0.4,1\right);~
+		p(x\mid y=3)=\mathcal{N}\left(1.55,1\right)
 	\end{align*}
 	our objective to get the optimal classifier
 	\begin{align*}
@@ -596,35 +614,35 @@ Given the above setup:
 	\end{align*} 
 	if $j=1$ we have
 	\begin{align*}
-		p(y\mid x)\cdot L_{:,1} =p(y=2\mid x)+2p(y=3\mid x)\propto\left[\frac{5}{17}\mathcal{N}\left(0.4,\frac{1}{5}\right)+\frac{12}{17}\mathcal{N}\left(1.55,\frac{1}{6}\right)\right]:=N_1(x)
+		p(y\mid x)\cdot L_{:,1} =p(y=2\mid x)+2p(y=3\mid x)\propto\left[\frac{5}{17}\mathcal{N}\left(0.4,1\right)+\frac{12}{17}\mathcal{N}\left(1.55,1\right)\right]:=N_1(x)
 	\end{align*}
 	similarly for $j=2 $ and $j=3$ we have
 	\begin{align*}
-		p(y\mid x)\cdot L_{:,2}& =p(y=1\mid x)+p(y=3\mid x)\propto\left[\frac{6}{17}\mathcal{N}\left(-1.75,\frac{1}{6}\right)+\frac{6}{17}\mathcal{N}\left(1.55,\frac{1}{6}\right)\right]:=N_2(x)\\
-		p(y\mid x)\cdot L_{:,3}& =2p(y=1\mid x)+p(y=2\mid x)\propto\left[\frac{12}{17}\mathcal{N}\left(-1.75,\frac{1}{6}\right)+\frac{5}{17}\mathcal{N}\left(0.4,\frac{1}{5}\right)\right]:=N_3(x)
+		p(y\mid x)\cdot L_{:,2}& =p(y=1\mid x)+p(y=3\mid x)\propto\left[\frac{6}{17}\mathcal{N}\left(-1.75,1\right)+\frac{6}{17}\mathcal{N}\left(1.55,1\right)\right]:=N_2(x)\\
+		p(y\mid x)\cdot L_{:,3}& =2p(y=1\mid x)+p(y=2\mid x)\propto\left[\frac{12}{17}\mathcal{N}\left(-1.75,1\right)+\frac{5}{17}\mathcal{N}\left(0.4,1\right)\right]:=N_3(x)
 	\end{align*}
 	To find the decision boundaries we know at the boundaries the risks are same(i.e., $N_i=N_j,i\neq j $). So, we can write
 	\begin{align*}
-		N_1(x)&=N_2(x)\Rightarrow x\approx -0.7007\\
+		N_1(x)&=N_2(x)\Rightarrow x\approx -0.668\\
 		N_1(x)&=N_3(x)\Rightarrow x\approx -0.1\\
-		N_2(x)&=N_3(x)\Rightarrow x\approx 0.9579
+		N_2(x)&=N_3(x)\Rightarrow x\approx 0.854
 	\end{align*}
-	Figure \ref{fig:Risk_MAP} shows the decision boundaries (minimizing expected loss under the MAP model).
+	Figure \ref{fig:Risk_MAP} shows the decision boundaries (minimizing risk under the MAP model).
 	\begin{figure}[H]
 		\centering
 		\resizebox{0.8\linewidth}{!}{
 			\centering
 			\includegraphics[width=\linewidth]{question_4a_ii.pdf}
 		}
-		\caption{Risk in MAP}
+		\caption{Conditional Risk in MAP}
 		\label{fig:Risk_MAP}
 	\end{figure}
 	Thus, the optimal classifier 
 	\begin{align*}
 		h_{MAP} (x) = \left\{ \begin{array}{ll}
-			1;& x\leq-0.7007\\
-			2;&-0.7007<x\leq0.9579\\
-			3;& 0.9579<x
+			1;& x\leq-0.668\\
+			2;&-0.668<x\leq0.854\\
+			3;& 0.854<x
 		\end{array}
 		\right.
 	\end{align*}
@@ -633,12 +651,43 @@ Given the above setup:
 \subpart[1] Is there any $x \in \mathbb{R}$ that is differently classified by the above two classifiers? 
 \begin{solution}
 	Yes there exist $x\in\mathbb{R}$ that is differently classified by the above two classifiers.
-	For $x\in[-0.748,-0.7007]$ the MLE model classifies as class 2 whereas MAP model classifies as class 1. Similarly for $x\in[0.9579,1.024]$ the MLE model classifies as class 2, where as the MAP model classifies as class-3.
+	For $x\in[-0.748,-0.668]$ the MLE model classifies as class 2 whereas MAP model classifies as class 1. Similarly for $x\in[0.854,1.024]$ the MLE model classifies as class 2, where as the MAP model classifies as class 3.
 \end{solution}
 \end{subparts}
 
 \part[2] Consider a classification problem in which the loss incurred on mis-classifying an input vector from class $C_k$  as $C_j$ is given by loss matrix entry $L_{kj}$, and for which the loss incurred in selecting the reject option is $\psi$. Find the decision criterion that will give minimum expected loss, and then simplify it for the case of 0-1 loss (i.e., when $L_{kj} = \mathbbm{1}_{k \ne j}$).
 \begin{solution}
+	For a test point $x$, the conditional risk of assigning it to class $C_j$ is
+	\begin{align*}
+		R(j\mid x) = p(y\mid x)\cdot L_{:,j}
+	\end{align*} 
+	And if we choose the reject option, the risk is 
+	\begin{align*}
+		R(\text{ reject }\mid x) = \psi
+	\end{align*}
+	So, the optimal classifier is 
+	\begin{align*}
+		h(x)= \left\{\begin{array}{ll}
+			\argmin_{j} R(j\mid x); & \mina_{j} R(j\mid x)\leq \psi\\
+			\text{reject};&\text{otherwise}
+		\end{array}
+		\right.
+	\end{align*}
+	for $0-1$ loss we have $L_{kj} = \mathbbm{1}_{k \ne j}$ then the risk becomes
+	\begin{align*}
+		R(j\mid x) = \sum_{k\neq j}p(C_k\mid x)=1-p(C_j\mid x)
+	\end{align*}
+	Thus the optimal classifier is
+	\begin{align*}
+		h(x)=& \left\{\begin{array}{ll}
+			\argmin_{j} R(j\mid x); & \mina_{j} R(j\mid x)\leq \psi\\
+			\text{reject};&\text{otherwise}
+		\end{array}
+		\right.\\=&\left\{\begin{array}{ll}
+		\argmax_{j} p(j\mid x); & \max_{j} p(j\mid x)\geq 1-\psi\\
+		\text{reject};&\text{otherwise}
+	\end{array}	\right.
+		\end{align*}
 \end{solution}
 %\newpage
 \end{parts}
@@ -683,9 +732,9 @@ For your assignment, you need to provide the following plots/answers (refer to t
 		\centering
 		\resizebox{.6\linewidth}{!}{
 			\centering
-			\includegraphics[width=\linewidth]{plots/pdf_case1.pdf}
+			\includegraphics[width=\linewidth]{plots/pdf_with_test_data.png}
 		}
-		\caption{Risk in MAP}
+		\caption{Gaussian pdfs}
 		\label{fig:pdf_1}
 	\end{figure}
 \end{solution}
@@ -694,26 +743,38 @@ For your assignment, you need to provide the following plots/answers (refer to t
 \begin{solution}
 	\begin{figure}[H]
 		\centering
-		\resizebox{.7\linewidth}{!}{
+		\resizebox{.6\linewidth}{!}{
 			\centering
-			\includegraphics[width=\linewidth]{plots/decision_boundary_bayes_classifier.pdf}
+			\includegraphics[width=\linewidth]{plots/decision_boundaries_train_data.png}
 		}
-		\caption{Decision Boundary}
+		\caption{Decision Boundary on train data}
 		\label{fig:decision_boundary}
 	\end{figure}
 \end{solution}
 
 \part[1] Report the error rates for the above classifiers (four classifiers on the two datasets as a 4 × 2 table, with appropriately named rows and columns).
 \begin{solution}
-	Error rate on test data:
+	Error rate on train data case-1 \& case-2:
 	\begin{center}
 		\begin{tabular}{|c|c|c|}
 			\hline
 			Bayes Classifier & Linearly Separable & Non-Linearly Separable \\
 			\hline
-			Shared Covariance & 0 & 0.233 \\
+			Shared Covariance & $0.0010$ & $0.2438$ \\
 			\hline
-			Different Covariance & 0 & 0.0267 \\
+			Different Covariance & $0.0010$ & $0.0200$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	Error rate on train data case-3 \& case-4:
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Naive Bayes Classifier & Linearly Separable & Non-Linearly Separable \\
+			\hline
+			Shared $\sigma^2$ & $0.0010$ & $0.2543$ \\
+			\hline
+			Different $\sigma^2$ & $0.0010$ &$ 0.1438$ \\
 			\hline
 		\end{tabular}
 	\end{center}
