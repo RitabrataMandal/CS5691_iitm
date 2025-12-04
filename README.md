@@ -96,6 +96,7 @@ Practice worksheets are provided for key topics:
 
 ## 📖 Reference
 
+- "Pattern Recognition and Machine Learning" by Christopher M. Bishop
 - "Pattern Classification" by Richard O. Duda, Peter E. Hart, and David G. Stork
 
 ## 🎓 Course Information
